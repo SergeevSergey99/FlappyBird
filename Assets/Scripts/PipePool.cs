@@ -5,29 +5,31 @@ using VContainer;
 public class PipePool
 {
     [Inject] private PipeFactory pipeFactory;
+    [Inject] private SkinSettings SkinSettings;
     
-    private readonly Queue<GameObject> pipePool = new();
+    private readonly Queue<PipeController> pipePool = new();
     
-    public GameObject CreatePipe(Vector3 position)
+    public PipeController CreatePipe(Vector3 position)
     {
-        GameObject pipe;
+        PipeController pipe;
         if (pipePool.Count > 0)
         {
             pipe = pipePool.Dequeue();
             pipe.transform.position = position;
-            pipe.SetActive(true);
+            pipe.gameObject.SetActive(true);
         }
         else
         {
             pipe = pipeFactory.CreateObstacle(position);
         }
+        pipe.SetColor(SkinSettings.GetRandomPipeColor());
         return pipe;
     }
-    public void ReturnPipe(GameObject pipe)
+    public void ReturnPipe(PipeController pipe)
     {
         if (pipe != null)
         {
-            pipe.SetActive(false);
+            pipe.gameObject.SetActive(false);
             pipePool.Enqueue(pipe);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -8,34 +9,40 @@ using Random = UnityEngine.Random;
 public class ObstacleSpawner : MonoBehaviour
 {
     [Inject] private GameManager GameManager;
+    [Inject] private GameSettings GameSettings;
     [Inject] private PipePool PipePool;
     
     [SerializeField] Transform[] spawnPoints;
-    [SerializeField] float spawnInterval = 2f;
 
-    float timer;
-    private HashSet<GameObject> obstaclePool = new();
+    Coroutine _spawnCoroutine = null;
+    private HashSet<PipeController> obstaclePool = new();
 
     private void Awake()
     {
         GameManager.OnRestart += ResetGame;
+        GameManager.OnGameOver += StopSpawnCoroutine;
     }
 
     private void OnDestroy()
     {
         GameManager.OnRestart -= ResetGame;
+        GameManager.OnGameOver -= StopSpawnCoroutine;
     }
 
-    void Update()
+    IEnumerator SpawnCoroutine()
     {
-        if (!GameManager.IsGameActive)
-            return;
-
-        timer += Time.deltaTime;
-        if (timer >= spawnInterval)
+        while (true)
         {
-            timer = 0f;
+            yield return new WaitForSeconds(GameSettings.SpawnInterval);
             Spawn();
+        }
+    }
+    void StopSpawnCoroutine()
+    {
+        if (_spawnCoroutine != null)
+        {
+            StopCoroutine(_spawnCoroutine);
+            _spawnCoroutine = null;
         }
     }
 
@@ -58,9 +65,11 @@ public class ObstacleSpawner : MonoBehaviour
             }
         }
         obstaclePool.Clear();
+        StopSpawnCoroutine();
+        _spawnCoroutine = StartCoroutine(SpawnCoroutine());
     }
     
-    public void RemoveObstacle(GameObject obstacle)
+    public void RemoveObstacle(PipeController obstacle)
     {
         if (obstaclePool.Contains(obstacle))
         {

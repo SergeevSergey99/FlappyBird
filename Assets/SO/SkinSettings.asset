@@ -14,5 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BirdSkins:
   - {fileID: -1171790437229086565, guid: 44357a684cd6b9e468fce094ae3e2bc7, type: 3}
-  ObstacleSkins:
-  - {fileID: 0}
+  PipeColors:
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0.5689325, b: 0, a: 1}
+  - {r: 0, g: 0.58015275, b: 1, a: 1}
+  - {r: 0.22897235, g: 0, b: 0.24528301, a: 1}
