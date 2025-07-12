@@ -8,62 +8,55 @@ public class BirdController : MonoBehaviour
     private Rigidbody2D rb;
     [SerializeField]
     private SpriteRenderer spriteRenderer;
-    
-    [Inject] public GameManager GameManager { get; set; }
 
-    bool isDead = false;
+    [Inject] private GameManager GameManager;
+    [Inject] private GameSettings GameSettings;
+    [Inject] private SkinSettings SkinSettings;
+
     Vector3 startPosition;
     
     [Inject]
     public void Construct()
     {
         startPosition = transform.position;
-        Physics2D.gravity = new Vector2(0, GameManager.Gravity);
-        if (spriteRenderer && GameManager.GetBirdSkin(0) != null)
-            spriteRenderer.sprite = GameManager.GetBirdSkin(0);
+        Physics2D.gravity = new Vector2(0, GameSettings.Gravity);
+        if (spriteRenderer && SkinSettings.GetBirdSkin(0) != null)
+            spriteRenderer.sprite = SkinSettings.GetBirdSkin(0);
         rb.bodyType = RigidbodyType2D.Kinematic;
-        isDead = false;
-        GameManager.OnRestart += Restart;
+        GameManager.OnRestart += OnRestart;
     }
     
     private void OnDestroy()
     {
-        GameManager.OnRestart -= Restart;
+        GameManager.OnRestart -= OnRestart;
     }
-
-    void Update()
+    public void Jump()
     {
         if (!GameManager.IsGameActive) return;
-
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && !isDead)
-        {
-            rb.linearVelocity = Vector2.up * GameManager.JumpForce;
-        }
+        rb.linearVelocity = Vector2.up * GameSettings.BirdJumpForce;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (!GameManager.IsGameActive) return;
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("ScoreZone"))
+        if (collision.gameObject.layer == LayersConstants.ScoreZoneLayer)
         {
             GameManager.AddScore();
         }
-        else if (collision.gameObject.layer == LayerMask.NameToLayer("Obstacle") || collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        else if (collision.gameObject.layer == LayersConstants.ObstacleLayer || collision.gameObject.layer == LayersConstants.GroundLayer)
         {
-            isDead = true;
             GameManager.GameOver();
             rb.linearVelocity = Vector2.zero;
             rb.bodyType = RigidbodyType2D.Kinematic; // чтобы не падала после проигрыша
         }
     }
 
-    public void Restart()
+    void OnRestart()
     {
         rb.bodyType = RigidbodyType2D.Dynamic; // чтобы снова можно было прыгать
         transform.position = startPosition;
         rb.linearVelocity = Vector2.zero;
-        isDead = false;
     }
 
     private void OnValidate()

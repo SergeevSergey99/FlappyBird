@@ -15,12 +15,19 @@ public class FlappyLifetimeScope : LifetimeScope
         builder.RegisterInstance(skinSettings);
 
         // GameManager и другие сервисы
-        builder.Register<GameManager>(Lifetime.Singleton);
+        builder.Register<GameManager>(Lifetime.Scoped);
+        builder.Register<PipeFactory>(resolver => 
+            new(resolver, gameSettings.PipePrefab),Lifetime.Scoped);
+        builder.Register<PipePool>(Lifetime.Scoped);
+        
 
         // Внедрять BirdController из сцены
         builder.RegisterComponentInHierarchy<BirdController>();
         builder.RegisterComponentInHierarchy<ScoreView>();
         builder.RegisterComponentInHierarchy<ObstacleSpawner>();
+        
+        // Внедрять InputController как ITickable
+        builder.Register<InputController>(Lifetime.Singleton).AsImplementedInterfaces();
     }
     void Start()
     {

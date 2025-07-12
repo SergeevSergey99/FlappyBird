@@ -1093,7 +1093,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0922e8bb8b640799c956cf8dd066c4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstaclePrefab: {fileID: 4765855153834147490, guid: dcb8a517b0b6b104b8079e749931282e, type: 3}
   spawnPoints:
   - {fileID: 1567912103}
   - {fileID: 638865900}
@@ -1128,8 +1127,8 @@ GameObject:
   - component: {fileID: 2095834999}
   - component: {fileID: 2095834998}
   - component: {fileID: 2095834997}
-  - component: {fileID: 2095834996}
   - component: {fileID: 2095835000}
+  - component: {fileID: 2095834996}
   m_Layer: 0
   m_Name: Bird
   m_TagString: Untagged

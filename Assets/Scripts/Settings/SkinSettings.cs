@@ -3,6 +3,9 @@
 [CreateAssetMenu(menuName = "Settings/SkinSettings")]
 public class SkinSettings : ScriptableObject
 {
-    public Sprite[] BirdSkins;
-    public Sprite[] ObstacleSkins;
+    [SerializeField]
+    private Sprite[] BirdSkins;
+    [SerializeField]
+    private Sprite[] ObstacleSkins;
+    public Sprite GetBirdSkin(int index) => BirdSkins[index];
 }

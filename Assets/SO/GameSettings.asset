@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3fe65db15fc489b8f01152fe5fcdc0e, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  Gravity: -9.8
-  BirdJumpForce: 5
-  ObstacleSpeed: 5
+  <PipePrefab>k__BackingField: {fileID: 4765855153834147490, guid: dcb8a517b0b6b104b8079e749931282e, type: 3}
+  <Gravity>k__BackingField: -9.8
+  <BirdJumpForce>k__BackingField: 5
+  <ObstacleSpeed>k__BackingField: 3

@@ -7,10 +7,9 @@ using Random = UnityEngine.Random;
 
 public class ObstacleSpawner : MonoBehaviour
 {
-    [Inject] public GameManager GameManager { get; set; }
-    [Inject] public IObjectResolver Container { get; set; }
+    [Inject] private GameManager GameManager;
+    [Inject] private PipePool PipePool;
     
-    [SerializeField] GameObject obstaclePrefab;
     [SerializeField] Transform[] spawnPoints;
     [SerializeField] float spawnInterval = 2f;
 
@@ -43,7 +42,7 @@ public class ObstacleSpawner : MonoBehaviour
     void Spawn()
     {
         var point = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        var obstacle = Container.Instantiate(obstaclePrefab, point.position, Quaternion.identity, transform);
+        var obstacle = PipePool.CreatePipe(point.position);
         obstaclePool.Add(obstacle);
     }
 
@@ -55,7 +54,7 @@ public class ObstacleSpawner : MonoBehaviour
         {
             if (obstacle != null)
             {
-                Destroy(obstacle);
+                PipePool.ReturnPipe(obstacle);
             }
         }
         obstaclePool.Clear();
@@ -66,7 +65,7 @@ public class ObstacleSpawner : MonoBehaviour
         if (obstaclePool.Contains(obstacle))
         {
             obstaclePool.Remove(obstacle);
-            Destroy(obstacle);
+            PipePool.ReturnPipe(obstacle);
         }
     }
 }

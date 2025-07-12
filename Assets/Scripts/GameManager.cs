@@ -4,9 +4,6 @@ using VContainer.Unity;
 
 public class GameManager
 {
-    readonly GameSettings gameSettings;
-    readonly SkinSettings skinSettings;
-
     public int CurrentScore { get; private set; }
     public bool IsGameActive { get; private set; } = false;
 
@@ -14,17 +11,6 @@ public class GameManager
     public event Action OnScoreChanged;
     public event Action OnRestart;
 
-    public GameManager(GameSettings gameSettings, SkinSettings skinSettings)
-    {
-        this.gameSettings = gameSettings;
-        this.skinSettings = skinSettings;
-    }
-
-    public float Gravity => gameSettings.Gravity;
-    public float JumpForce => gameSettings.BirdJumpForce;
-    public float ObstacleSpeed => gameSettings.ObstacleSpeed;
-
-    public Sprite GetBirdSkin(int index) => skinSettings.BirdSkins[index];
 
     public void AddScore(int value = 1)
     {
