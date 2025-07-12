@@ -17,13 +17,15 @@ public class ScoreView : MonoBehaviour
     void OnEnable()
     {
         GameManager.OnGameOver += ShowRestart;
+        GameManager.OnScoreChanged += UpdateScore;
     }
     void OnDisable()
     {
         GameManager.OnGameOver -= ShowRestart;
+        GameManager.OnScoreChanged -= UpdateScore;
     }
 
-    void Update()
+    void UpdateScore()
     {
         scoreText.text = $"Score: {GameManager.CurrentScore}";
     }

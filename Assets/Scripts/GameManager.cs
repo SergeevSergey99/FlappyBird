@@ -11,6 +11,7 @@ public class GameManager
     public bool IsGameActive { get; private set; } = false;
 
     public event Action OnGameOver;
+    public event Action OnScoreChanged;
     public event Action OnRestart;
 
     public GameManager(GameSettings gameSettings, SkinSettings skinSettings)
@@ -29,12 +30,14 @@ public class GameManager
     {
         if (!IsGameActive) return;
         CurrentScore += value;
+        OnScoreChanged?.Invoke();
     }
 
     public void Restart()
     {
         OnRestart?.Invoke();
         CurrentScore = 0;
+        OnScoreChanged?.Invoke();
         IsGameActive = true;
     }
 
