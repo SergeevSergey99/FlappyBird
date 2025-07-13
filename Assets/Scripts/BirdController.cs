@@ -12,12 +12,9 @@ public class BirdController : MonoBehaviour
     
     int score = 0;
     
-    void Update()
+    public void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
-        {
-            rb.linearVelocity = Vector2.up * jumpForce;
-        }
+        rb.linearVelocity = Vector2.up * jumpForce;
     }
     
     void OnCollisionEnter2D(Collision2D collision)
