@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,8 +6,9 @@ public class BirdController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float jumpForce = 5f;
-    [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private Text scoreText;
+    
+    public event Action<int> OnScoreChanged;
+    public event Action OnGameOver;
     
     int score = 0;
     
@@ -16,17 +18,16 @@ public class BirdController : MonoBehaviour
         {
             rb.linearVelocity = Vector2.up * jumpForce;
         }
-        scoreText.text = "Score: " + score;
     }
     
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Time.timeScale = 0f;
-        gameOverPanel.SetActive(true);
+        OnGameOver?.Invoke();
     }
     
     void OnTriggerEnter2D(Collider2D other)
     {
         score++;
+        OnScoreChanged?.Invoke(score);
     }
 }
