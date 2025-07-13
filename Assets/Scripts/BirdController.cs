@@ -7,10 +7,8 @@ public class BirdController : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private float jumpForce = 5f;
     
-    public event Action<int> OnScoreChanged;
-    public event Action OnGameOver;
-    
-    int score = 0;
+    public event Action OnCollision;
+    public event Action OnTrigger;
     
     public void Jump()
     {
@@ -19,12 +17,11 @@ public class BirdController : MonoBehaviour
     
     void OnCollisionEnter2D(Collision2D collision)
     {
-        OnGameOver?.Invoke();
+        OnCollision?.Invoke();
     }
     
     void OnTriggerEnter2D(Collider2D other)
     {
-        score++;
-        OnScoreChanged?.Invoke(score);
+        OnTrigger?.Invoke();
     }
 }

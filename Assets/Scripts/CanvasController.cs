@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CanvasController : MonoBehaviour
 {
-    [SerializeField] private BirdController birdController;
+    [SerializeField] private GameManager gameManager;
     
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private Button restartButton;
@@ -14,34 +14,27 @@ public class CanvasController : MonoBehaviour
     private void Start()
     {
         SetScore(0);
-        restartButton.onClick.AddListener(RestartGame);
-        birdController.OnScoreChanged += SetScore;
-        birdController.OnGameOver += ShowGameOverPanel;
+        restartButton.onClick.AddListener(gameManager.RestartGame);
+        gameManager.OnScoreChanged += SetScore;
+        gameManager.OnGameOver += ShowGameOverPanel;
     }
 
     private void OnDestroy()
     {
-        if (birdController != null)
+        if (gameManager != null)
         {
-            birdController.OnScoreChanged -= SetScore;
-            birdController.OnGameOver -= ShowGameOverPanel;
+            gameManager.OnScoreChanged -= SetScore;
+            gameManager.OnGameOver -= ShowGameOverPanel;
         }
     }
 
     private void ShowGameOverPanel()
     {
-        Time.timeScale = 0f;
         gameOverPanel.SetActive(true);
     }
 
     void SetScore(int score)
     {
         scoreText.text = "Score: " + score;
-    }
-    public void RestartGame()
-    {
-        // Reset the game state
-        Time.timeScale = 1f; // Resume time
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
